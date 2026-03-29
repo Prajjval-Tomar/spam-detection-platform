@@ -11,6 +11,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Set PYTHONPATH so ml_engine is accessible
 ENV PYTHONPATH=/app
 
+# Collect static files
+RUN python backend/manage.py collectstatic --noinput
+
 CMD ["python", "backend/manage.py", "runserver", "0.0.0.0:8000"]
 
 # final
