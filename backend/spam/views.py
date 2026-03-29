@@ -8,9 +8,9 @@ from .serializers import PhoneNumberSerializer
 # ✅ ML + GenAI imports
 from ml_engine.predict import predict_spam
 from ml_engine.explain import generate_explanation
+from django.core.cache import cache
+from .tasks import process_spam_score
 
-
-# 🔍 Lookup API
 class LookupNumberAPIView(APIView):
     def get(self, request):
         number = request.query_params.get("number")
@@ -18,29 +18,22 @@ class LookupNumberAPIView(APIView):
         if not number:
             return Response({"error": "Number required"}, status=400)
 
-        # Get or create number
-        obj, created = PhoneNumber.objects.get_or_create(number=number)
+        cache_key = f"phone_{number}"
+        cached_data = cache.get(cache_key)
 
-        # 🔥 STEP 1: Prepare dummy text (later we improve)
-        text = f"Message from {number}"
+        if cached_data:
+            return Response(cached_data)
 
-        # 🔥 STEP 2: ML Prediction
-        score = predict_spam(text)
+        obj, _ = PhoneNumber.objects.get_or_create(number=number)
 
-        # 🔥 STEP 3: GenAI Explanation
-        explanation = generate_explanation(score)
+        # async processing
+        process_spam_score.delay(number)
 
-        # 🔥 STEP 4: Update DB
-        obj.spam_score = score
-        obj.is_spam = score > 0.5
-        obj.save()
-
-        # 🔥 STEP 5: Serialize + add explanation
         data = PhoneNumberSerializer(obj).data
-        data["explanation"] = explanation
+
+        cache.set(cache_key, data, timeout=60)
 
         return Response(data)
-
 
 # 🚨 Report Spam API
 class ReportSpamAPIView(APIView):
