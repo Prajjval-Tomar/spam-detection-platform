@@ -1,30 +1,51 @@
-# AI-Powered Spam Detection Platform
+# 🚀 AI-Powered Spam Detection Platform
 
-## Overview
+## 📌 Overview
 
-This project is a scalable backend system for detecting spam phone numbers using:
+A scalable backend system for detecting spam phone numbers using Machine Learning and AI.
 
-- Django & DRF
-- Redis & Celery
-- Machine Learning (NLP)
-- Docker & CI/CD
-
-## Features
+## ⚙️ Features
 
 - Phone number lookup
-- Spam detection
-- Async processing
-- ML-based scoring
-- Scalable architecture
+- Spam detection using ML
+- GenAI-based explanation
+- REST APIs (Django DRF)
+- Dockerized deployment
+- CI/CD pipeline (GitHub Actions)
 
-## Tech Stack
+## 🧠 Tech Stack
 
 - Python, Django, DRF
-- PostgreSQL
-- Redis, Celery
+- Machine Learning (TF-IDF, Naive Bayes)
 - Docker
 - GitHub Actions
+- AWS EC2
 
-## Status
+## 🏗️ Architecture
 
-🚧 Under Development
+- Backend API
+- ML Engine
+- Docker containerization
+- CI/CD automation
+
+## 🚀 How to Run
+
+```bash
+git clone <repo>
+cd docker
+docker-compose up --build
+
+
+📡 API Endpoints
+Lookup
+
+GET /api/spam/lookup/?number=1234567890
+
+Report Spam
+
+POST /api/spam/report/
+
+📈 Future Enhancements
+Redis caching
+Celery async processing
+React frontend
