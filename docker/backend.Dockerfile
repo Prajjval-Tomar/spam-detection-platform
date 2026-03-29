@@ -1,15 +1,14 @@
-# Use official Python image
 FROM python:3.11
 
-# Set working directory
 WORKDIR /app
 
-# Copy project files
-COPY ../backend /app
+# ✅ Copy entire project (IMPORTANT FIX)
+COPY .. /app
 
 # Install dependencies
-COPY ../requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Run server
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+# Set PYTHONPATH so ml_engine is accessible
+ENV PYTHONPATH=/app
+
+CMD ["python", "backend/manage.py", "runserver", "0.0.0.0:8000"]
