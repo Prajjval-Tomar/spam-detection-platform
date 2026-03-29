@@ -121,6 +121,16 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+# configured redis cache
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://redis:6379/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
 
 import os
 
